@@ -29,6 +29,9 @@
       </div>
       <figure class="hero-art">
         <img src="imágenes/interior-04.jpg" alt=" parte de capullo - lápices de colores sobre papel">
+        <button class="gallery-open" type="button" aria-label="Ver galería de imágenes en grande">
+          <span aria-hidden="true">↗</span>
+        </button>
         <figcaption><span>01 / Exploraciones</span><span>Lápices sobre papel</span></figcaption>
       </figure>
       <span class="hero-index" aria-hidden="true">A—01</span>
@@ -83,5 +86,60 @@
     <p>Portfolio </p>
     <a class="text-link" href="#inicio">Volver arriba <span aria-hidden="true">↑</span></a>
   </footer>
+
+  <dialog class="image-gallery" aria-label="Galería de imágenes">
+    <button class="gallery-close" type="button" aria-label="Cerrar galería">×</button>
+    <button class="gallery-arrow gallery-previous" type="button" aria-label="Ver imagen anterior">←</button>
+    <figure class="gallery-content">
+      <img class="gallery-image" src="" alt="">
+      <figcaption class="gallery-caption"></figcaption>
+    </figure>
+    <button class="gallery-arrow gallery-next" type="button" aria-label="Ver imagen siguiente">→</button>
+  </dialog>
+
+  <script>
+    const galleryImages = [
+      { src: "imágenes/interior-02.jpg", alt: "Interior I" },
+      { src: "imágenes/interior-03.jpg", alt: "Interior II" },
+      { src: "imágenes/interior-04.jpg", alt: "Interior III" },
+      { src: "imágenes/interior-05.jpg", alt: "Interior IV" },
+      { src: "imágenes/interior-06.jpg", alt: "Interior V" },
+      { src: "imágenes/capullo1.jpg", alt: "Interior  " }
+    ];
+    const gallery = document.querySelector(".image-gallery");
+    const galleryImage = gallery.querySelector(".gallery-image");
+    const galleryCaption = gallery.querySelector(".gallery-caption");
+    let activeImageIndex = 2;
+
+    function showGalleryImage(index) {
+      activeImageIndex = (index + galleryImages.length) % galleryImages.length;
+      const image = galleryImages[activeImageIndex];
+      galleryImage.src = image.src;
+      galleryImage.alt = image.alt;
+      galleryCaption.textContent = `${image.alt} · ${activeImageIndex + 1} / ${galleryImages.length}`;
+    }
+
+    document.querySelector(".gallery-open").addEventListener("click", () => {
+      showGalleryImage(2);
+      gallery.showModal();
+    });
+
+    document.querySelector(".gallery-close").addEventListener("click", () => gallery.close());
+    document.querySelector(".gallery-previous").addEventListener("click", () => {
+      showGalleryImage(activeImageIndex - 1);
+    });
+    document.querySelector(".gallery-next").addEventListener("click", () => {
+      showGalleryImage(activeImageIndex + 1);
+    });
+
+    gallery.addEventListener("click", (event) => {
+      if (event.target === gallery) gallery.close();
+    });
+
+    gallery.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowLeft") showGalleryImage(activeImageIndex - 1);
+      if (event.key === "ArrowRight") showGalleryImage(activeImageIndex + 1);
+    });
+  </script>
 </body>
 </html>
